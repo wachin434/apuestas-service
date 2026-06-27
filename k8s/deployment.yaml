@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: apuestas-service-deployment
+  namespace: default
+  labels:
+    app: apuestas-service
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: apuestas-service
+  template:
+    metadata:
+      labels:
+        app: apuestas-service
+    spec:
+      containers:
+      - name: apuestas-service
+        image: apuestas-service:latest
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 8005
+        resources:
+          requests:
+            cpu: "100m"
