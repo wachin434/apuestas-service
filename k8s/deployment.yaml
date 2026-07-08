@@ -21,6 +21,33 @@ spec:
         imagePullPolicy: Always
         ports:
         - containerPort: 8005
+        env:
+        - name: DATABASE_URL
+          valueFrom:
+            secretKeyRef:
+              name: casino-secrets
+              key: DATABASE_URL
+        - name: JWT_SECRET
+          valueFrom:
+            secretKeyRef:
+              name: casino-secrets
+              key: JWT_SECRET
+        livenessProbe:
+          httpGet:
+            path: /health/liveness
+            port: 8005
+          initialDelaySeconds: 10
+          periodSeconds: 10
+        readinessProbe:
+          httpGet:
+            path: /health/readiness
+            port: 8005
+          initialDelaySeconds: 10
+          periodSeconds: 10
         resources:
           requests:
             cpu: "100m"
+            memory: "128Mi"
+          limits:
+            cpu: "200m"
+            memory: "256Mi"
